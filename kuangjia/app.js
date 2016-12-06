@@ -20,6 +20,7 @@ var request=require('request')
 
 var fs=require('fs')
 
+var $=require('jquery')
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -50,17 +51,21 @@ app.use(session({
     saveUninitialized: true//每次请求都设置个session cookie
 }));
 
+var src={
+	'home':'http://r.qidian.com/',
+	'b':'http://read.qidian.com/chapter/JSSsq8y8oOs1/JY01G_iMVeo1',
+	'c':'https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=1&rsv_idx=1&tn=baidu&wd=es6&oq=%E8%A1%8C%E5%B0%B8%E8%B5%B0%E8%82%89%E7%9A%84%E6%84%8F%E6%80%9D&rsv_pq=caaffabf00007504&rsv_t=44f8FYqVJGXG2IjDuf8%2F66qJssY1%2F0u%2BNJFrC4aE%2FhRALLVkgflrJZdCO3k&rqlang=cn&rsv_enter=1&rsv_sug3=8&rsv_sug1=5&rsv_sug7=100&rsv_sug2=0&prefixsug=es&rsp=0&inputT=4707&rsv_sug4=19127'
 
+}
 
 app.get('/re', function(req, res) {
-    request('http://r.qidian.com/', function(error, response, body) {
+    request(src.b, function(error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(typeof body) // Show the HTML for the homepage. 
-            fs.writeFile('./testMessage.md', body, function(err) {
+            fs.writeFile('./testMessage.html', body, function(err) {
                 if (err) throw err;
                 console.log('It\'s saved!');
             });
-            console.log(response)
             res.end(body)
         }
     })
@@ -72,7 +77,7 @@ app.get('/re', function(req, res) {
 
 app.use(function(req, res, next){
     res.locals.user = req.session.user;
-    console.log(res);
+    // console.log(res);
     var error = req.flash('error');
     res.locals.error = error.length ? error : null;
 

@@ -9,24 +9,35 @@
 
 <body>
     <h1>数据正在请求中...</h1>
-    <div style="height: 600px;background-color:green"></div>
+    <div style="height: 200px;background-color:green"></div>
     <script>
         $("h1").click(function() {
-          console.log("请求发送ing")
+            console.log("请求发送ing")
             $.ajax({
                 url: "/re",
                 type: "GET",
                 // dataType:'json',
                 success: function(data) {
-                    document.write(data)
+                    console.log(getDom(data))
+                     $("body").append(getDom(data))
                 },
-                error:function () {
-                  console.log("请求数据失败")
+                error: function() {
+                    console.log("请求数据失败")
                 }
 
             });
         })
 
+        function getDom(data) {
+            var len=data.length;
+            var start=data.indexOf('<body');
+            var end=data.indexOf('</body>')+7;
+            var len=end-start;
+            var datas = data.substr(start,len)
+            var done=$("<div name=llqqqqqllll></div>").append(datas).find(".read-content").html()
+                done=done.replace(/\<p\>|\<\/p\>/g,"")
+            return done
+        }
         // $.ajax({
         //    'url':"http://127.0.0.1:3000/getData",
         //    'type':"POST",

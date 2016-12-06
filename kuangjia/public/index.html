@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="jquery.js"></script>
+</head>
+
+<body>
+    <h1>数据正在请求中...</h1>
+    <script>
+        $("h1").click(function() {
+          console.log("请求发送ing")
+            $.ajax({
+                url: "/re",
+                type: "GET",
+                // dataType:'json',
+                success: function(data) {
+                    console.log(10000000,data);
+                    // alert(1000000,data);
+                },
+                error:function () {
+                  console.log("请求数据失败")
+                }
+
+            });
+        })
+
+        // $.ajax({
+        //    'url':"http://127.0.0.1:3000/getData",
+        //    'type':"POST",
+        //    'data': { "name": "John", "test": "foo" },
+        //    'dataType':'json',
+        //    'success':function(data){
+        //      console.log(data);
+
+        //  }});
+    </script>
+</body>
+
+</html>

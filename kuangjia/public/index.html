@@ -9,7 +9,7 @@
 
 <body>
     <h1>数据正在请求中...</h1>
-    <div style="height: 300px;background-color:green"></div>
+    <div style="height: 600px;background-color:green"></div>
     <script>
         $("h1").click(function() {
           console.log("请求发送ing")
@@ -21,7 +21,7 @@
                    // var data1=eval("("+data+")")
                     console.log(10000000,data);
                     console.log($("div"))
-                    $("div").append(data)
+                    $("div").append("00000")
                 },
                 error:function () {
                   console.log("请求数据失败")

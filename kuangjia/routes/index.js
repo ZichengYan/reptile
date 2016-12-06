@@ -1,9 +1,110 @@
-var express = require('express');
-var router = express.Router();
+// 引入需要的模块
+var express = require('express'),
+	router = express.Router(),
+	crypto = require('crypto'),
+	User = require('../models/user.js');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get("/reg", function (req, res) {
+	res.render('reg', {showTitle: "123132"});
+		//return res.redirect('/index');
 });
+
+
+ router.get("/index", function (req, res) {
+	  res.locals.success = '注册成功';
+ 	res.render('index',{aa: "123132",user:"132123"});
+
+ });
+router.get("/", function (req, res) {
+	res.render('index',{aa: "123132",userName:"wuyou"});
+
+});
+//判断是否已经登录
+router.post("/reg",checkNotLogin);
+router.post("/reg",function(req,res) {
+	if (req.body['password-repeat'] != req.body['password']) {
+		req.flash('error', '两次输入的口令不一致');
+		return res.redirect('/reg');
+	}
+	console.log(req.body['password'])
+
+	var md5 = crypto.createHash('md5');
+	var password = md5.update(req.body.password).digest('base64');
+
+	var newUser = new User({
+		name: req.body.username,
+		password: password,
+	});
+
+	User.getUserByName(req.body.username,function(err, result){
+		console.dir(result);
+		if (err) {
+			//我们给app.js里面定义的error对象传一个值err
+			req.flash('error', err);
+			return res.redirect('/reg');
+		}
+		//console.dir(result.length);
+		if(result){
+			req.flash('error', '名称已经存在!!!');
+			res.redirect('/reg');
+		}
+		else{
+			User.addUser(newUser,function(err, data){
+
+				req.session.user = newUser;
+				req.flash('success','注册成功!');
+				res.redirect('/index');
+			})
+
+		}
+
+	});
+
+
+});
+router.get("/login",checkNotLogin);
+router.get("/login", function (req, res) {
+	res.render('login');
+});
+router.post("/login",checkNotLogin);
+router.post("/login",function(req,res) {
+	var md5 = crypto.createHash('md5');
+	var password = md5.update(req.body.password).digest('base64');
+
+	User.getUserByName(req.body.username,function(err, result){
+		console.dir(result);
+		if (!result) {
+			req.flash('error', '用户不存在');
+			return res.send('用户不存在!');
+		}
+		if (result.password != password) {
+			req.flash('error', '用户口令错误');
+			return res.redirect('/login');
+		}
+		req.session.user = result;
+		req.flash('success', '登入成功');
+		res.redirect('/');
+	});
+});
+router.get("/logout",checkLogin);
+router.get("/logout",function(req,res) {
+	console.dir(req.session.user);
+	req.session.user=null;
+	res.send('登出成功！！！');
+});
+function checkLogin(req, res, next) {
+	if (!req.session.user) {
+		return res.redirect('/login');
+	}
+	next();
+}
+function checkNotLogin(req, res, next) {
+	//如果已经登录过就不可以在注册，直接跳转到首页
+	if (req.session.user) {
+		req.flash('error', '已登入');
+		return res.redirect('/index');
+	}
+	next();
+}
 
 module.exports = router;

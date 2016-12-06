@@ -1,12 +1,15 @@
+/*
+ * 数据库连接配置模块 
+ */
 'use strict';
 
 const mysql = require('mysql');
 
 const pool  = mysql.createPool({
-    host : 'localhost',
-    user : 'user13',
-    password : 'hg7282',
-    database : 'user13'
+    host : '115.28.14.114',
+    user : 'my_project',
+    password : 'project',
+    database : 'my_project'
 });
 
 /**
@@ -44,5 +47,7 @@ exports.query = function() {
         });
     });
 };
+
+
 
 

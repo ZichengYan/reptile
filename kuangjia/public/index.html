@@ -18,10 +18,7 @@
                 type: "GET",
                 // dataType:'json',
                 success: function(data) {
-                   // var data1=eval("("+data+")")
-                    console.log(10000000,data);
-                    console.log($("div"))
-                    $("div").append("00000")
+                    document.write(data)
                 },
                 error:function () {
                   console.log("请求数据失败")

@@ -5,21 +5,22 @@ var bodyParser = require('body-parser');
 var poster = require('http-poster');
 var fs = require('fs');
 var http=require('http');
+var request=require('request');
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 var app = express();
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-request
+
 
 // app.use('/', routes);
 // app.use('/users', users);
 //http://r.qidian.com/
 app.get('/re', function(req, res) {
-	var html=""
+	/*var html=""
     poster.get('https://www.baidu.com', function(err, result, data) {
         // console.log(err);
         // console.log(result);
@@ -34,13 +35,12 @@ app.get('/re', function(req, res) {
             console.log('It\'s saved!');
         });
         res.end(html+"回来的数据完整吗?")
-    });
-   /* https.get('https://www.baidu.com', function(res) {
-      console.log("Got response: " + res.statusCode);
-      // res.end("saaasasassa")
-    }).on('error', function(e) {
-      console.log("Got error: " + e.message);
     });*/
-
+   request('https://www.baidu.com', function (error, response, body) {
+     if (!error && response.statusCode == 200) {
+       console.log(typeof body) // Show the HTML for the Google homepage. 
+       res.end(body)
+     }
+   })
 })
 module.exports = app;

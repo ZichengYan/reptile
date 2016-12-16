@@ -74,7 +74,6 @@ app.get('/re', function(req, res) {
 
 
 
-
 app.use(function(req, res, next){
     res.locals.user = req.session.user;
     // console.log(res);
@@ -86,7 +85,6 @@ app.use(function(req, res, next){
     res.locals.success = success.length ? success : null;
     next();
 });
-
 
 app.use('/', index);
 
